@@ -1,0 +1,59 @@
+experiment:
+  name: gender_classifier
+  task: gender
+  description: Train gender classification model (male/female, excluding unknown)
+data:
+  train_dir: /home/nihit/highlander/data/prepared/gender_20260222_053924/train
+  valid_dir: /home/nihit/highlander/data/prepared/gender_20260222_053924/valid
+  test_dir: /home/nihit/highlander/data/prepared/gender_20260222_053924/test
+  image_size:
+  - 224
+  - 224
+  batch_size: 32
+  num_workers: 4
+  pin_memory: true
+  augmentation:
+    enabled: true
+    horizontal_flip: 0.5
+    brightness_limit: 0.2
+    contrast_limit: 0.2
+    rotate_limit: 10
+model:
+  architecture: resnet18,convnext_atto.d2_in1k
+  pretrained: true
+  dropout: 0.4
+  classifier:
+    hidden_dims:
+    - 512
+    - 256
+    use_batchnorm: true
+training:
+  epochs: 30
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  optimizer: adam
+  scheduler:
+    type: cosine_annealing
+  early_stopping:
+    enabled: true
+    patience: 7
+    min_delta: 0.001
+    monitor: val_loss
+  class_weights: balanced
+  gradient_clip: 1.0
+output:
+  save_dir: /home/nihit/highlander/artifacts
+  save_every_epoch: false
+  save_best_only: true
+  artifacts:
+    confusion_matrix: true
+    classification_report: true
+    learning_curves: true
+    sample_predictions: true
+    misclassified_images: true
+    onnx_export: true
+hardware:
+  device: auto
+  mixed_precision: false
+logging:
+  level: INFO
