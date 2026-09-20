@@ -1,0 +1,14 @@
+{
+  "classes": [
+    "female",
+    "male"
+  ],
+  "index_to_class": {
+    "0": "female",
+    "1": "male"
+  },
+  "class_to_index": {
+    "female": 0,
+    "male": 1
+  }
+}
