@@ -1,0 +1,22 @@
+# Highlander - Python Dependencies
+# Install with: pip install -r requirements.txt
+
+# Kafka
+confluent-kafka>=2.3.0
+
+# VLM / OpenAI API
+openai>=1.0.0
+
+# Image processing
+opencv-python>=4.8.0
+numpy>=1.24.0
+
+# Database
+psycopg2-binary>=2.9.0
+
+# MinIO (S3-compatible storage)
+minio>=7.2.0
+
+# Web framework (for webapp)
+flask>=2.3.0
+

@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLOps Curation — Admin Command Console</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/themes.css?v=7.0">
+    <script src="/static/instant-nav.js?v=7.0"></script>
+    <style>
+        .suite-tabs-nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+        .suite-tab-pill {
+            padding: 9px 20px;
+            border-radius: 9999px;
+            font-size: 0.86rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            background: rgba(255, 255, 255, 0.05);
+            color: #94a3b8;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+        .suite-tab-pill:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .suite-tab-pill.active {
+            background: #6366f1 !important;
+            color: #ffffff !important;
+            border-color: #6366f1 !important;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35) !important;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.25s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Table Filter Toolbar */
+        .suite-table-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .suite-filter-input {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(13, 19, 34, 0.8);
+            border-radius: 9999px;
+            padding: 7px 14px;
+            font-size: 0.84rem;
+            color: #f1f5f9;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        .suite-filter-input:focus {
+            background: rgba(13, 19, 34, 0.95);
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+        }
+        .suite-filter-select {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(13, 19, 34, 0.8);
+            border-radius: 9999px;
+            padding: 7px 14px;
+            font-size: 0.84rem;
+            color: #cbd5e1;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Modal Styles */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(8, 12, 20, 0.7);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-backdrop.active {
+            display: flex;
+        }
+        .modal-box {
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(28px) saturate(180%);
+            -webkit-backdrop-filter: blur(28px) saturate(180%);
+            border-radius: 20px;
+            max-width: 540px;
+            width: 100%;
+            box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #f1f5f9;
+            overflow: hidden;
+            animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .modal-head {
+            padding: 20px 24px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .modal-head h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .modal-close-btn {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            color: #94a3b8;
+            cursor: pointer;
+        }
+        .modal-close-btn:hover { color: #0f172a; }
+        .modal-body {
+            padding: 24px;
+        }
+        .modal-foot {
+            padding: 16px 24px;
+            background: #f8fafc;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #0f172a;
+            outline: none;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+        .form-control:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="suite-ambient-mesh"></div>
+
+    <div class="suite-shell">
+        <!-- ---------------------------------------------------------------- -->
+        <!-- LEFT SIDEBAR -->
+        <!-- ---------------------------------------------------------------- -->
+        <aside class="suite-sidebar">
+            <div class="suite-sidebar-resizer" id="suiteSidebarResizer" title="Hold and drag to resize sidebar"></div>
+            <div class="suite-sidebar-header">
+                <a href="/main" class="suite-sidebar-brand" title="MLops curation" data-tooltip="MLops curation">
+                    <div class="suite-brand-text">
+                        <div class="brand-line-primary">ML<span class="brand-ops">ops</span></div>
+                        <div class="brand-line-secondary">curation</div>
+                    </div>
+                    <div class="suite-brand-shrunk" aria-hidden="true">
+                        <span class="shrunk-ml">ML</span>
+                        <span class="shrunk-ops">ops</span>
+                    </div>
+                </a>
+            </div>
+
+            <ul class="suite-nav-group">
+                <li>
+                    <a href="/main" class="suite-nav-item" data-tooltip="Dashboard" title="Dashboard">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="9" x="3" y="3" rx="1"/>
+                            <rect width="7" height="5" x="14" y="3" rx="1"/>
+                            <rect width="7" height="9" x="14" y="12" rx="1"/>
+                            <rect width="7" height="5" x="3" y="16" rx="1"/>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/curation" class="suite-nav-item" data-tooltip="Curation" title="Curation">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <circle cx="12" cy="12" r="6"/>
+                            <circle cx="12" cy="12" r="2"/>
+                        </svg>
+                        <span>Curation</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin" class="suite-nav-item active" data-tooltip="Admin Panel" title="Admin Panel">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        <span>Admin</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/training" class="suite-nav-item" data-tooltip="MLOps Training" title="MLOps Training">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                        <span>MLOps</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="suite-sidebar-spacer"></div>
+
+            <!-- Sidebar User Profile & Notifications -->
+            <div class="suite-sidebar-footer">
+                <a href="/logout" class="suite-profile-chip" title="{{ user }} (Administrator) • Click to Logout" data-tooltip="{{ user }} • Logout">
+                    <div class="suite-avatar">{{ user[0].upper() }}</div>
+                    <div class="suite-user-meta">
+                        <span class="suite-user-name">{{ user }}</span>
+                        <span class="suite-user-role">Administrator</span>
+                    </div>
+                </a>
+                <div class="suite-notif-btn" title="Notifications" data-tooltip="Notifications">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                    </svg>
+                    <span class="suite-notif-badge"></span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ---------------------------------------------------------------- -->
+        <!-- MAIN AREA -->
+        <!-- ---------------------------------------------------------------- -->
+        <div class="suite-main">
+
+            <!-- Main Content Container -->
+            <main class="suite-content">
+                <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-bottom: 4px;">
+                    <button class="btn-action" onclick="showModal('createBatchModal')">
+                        <span>+ Assign New Batch</span>
+                    </button>
+                    <button class="btn-action" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important; box-shadow: 0 8px 24px -4px rgba(16, 185, 129, 0.4) !important;" onclick="showModal('createUserModal')">
+                        <span>+ Add New User</span>
+                    </button>
+                </div>
+
+                <!-- 4 Stat Metric Cards with Wave Sparklines -->
+                <div class="suite-metric-grid">
+                    <!-- Card 1: Total Inferences -->
+                    <div class="suite-metric-card">
+                        <div class="suite-metric-header">
+                            <span class="suite-metric-label">Total Inferences</span>
+                            <div class="suite-metric-icon purple">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="suite-metric-body">
+                            <span class="suite-metric-num" id="stat-inferences">1,240</span>
+                            <span class="suite-trend-pill up-blue">↑ 8%</span>
+                        </div>
+                        <span class="suite-metric-sub">Model predictions</span>
+                    </div>
+
+                    <!-- Card 2: Unassigned Pool -->
+                    <div class="suite-metric-card">
+                        <div class="suite-metric-header">
+                            <span class="suite-metric-label">Unassigned Pool</span>
+                            <div class="suite-metric-icon blue">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                                    <path d="M3 5V19A9 3 0 0 0 21 19V5"/>
+                                    <path d="M3 12A9 3 0 0 0 21 12"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="suite-metric-body">
+                            <span class="suite-metric-num" id="stat-unassigned">320</span>
+                            <span class="suite-trend-pill down-rose">↓ 5%</span>
+                        </div>
+                        <span class="suite-metric-sub">Images in queue</span>
+                    </div>
+
+                    <!-- Card 3: Total Curated -->
+                    <div class="suite-metric-card">
+                        <div class="suite-metric-header">
+                            <span class="suite-metric-label">Total Curated</span>
+                            <div class="suite-metric-icon green">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 6 9 17l-5-5"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="suite-metric-body">
+                            <span class="suite-metric-num" id="stat-curated">856</span>
+                            <span class="suite-trend-pill up-green">↑ 12%</span>
+                        </div>
+                        <span class="suite-metric-sub">Verified samples</span>
+                    </div>
+
+                    <!-- Card 4: Active Curators -->
+                    <div class="suite-metric-card">
+                        <div class="suite-metric-header">
+                            <span class="suite-metric-label">Active Curators</span>
+                            <div class="suite-metric-icon green">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="suite-metric-body">
+                            <span class="suite-metric-num" id="stat-active-curators">12</span>
+                            <span class="suite-trend-pill up-green">↑ 3%</span>
+                        </div>
+                        <span class="suite-metric-sub">Currently working</span>
+                    </div>
+                </div>
+
+                <!-- Sub-Navigation Pills -->
+                <div class="suite-tabs-nav">
+                    <button class="suite-tab-pill tab-pill active" onclick="switchTab('batches')">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>
+                        </svg>
+                        <span>Batch Assignments</span>
+                    </button>
+                    <button class="suite-tab-pill tab-pill" onclick="switchTab('users')">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        <span>User Accounts</span>
+                    </button>
+                    <button class="suite-tab-pill tab-pill" onclick="switchTab('curators')">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                        <span>Curator Progress</span>
+                    </button>
+                    <button class="suite-tab-pill tab-pill" onclick="switchTab('health')">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                        <span>Pipeline Health</span>
+                    </button>
+                </div>
+
+                <!-- Tab 1: Batch Assignments -->
+                <div id="tab-batches" class="tab-content active">
+                    <div class="suite-card">
+                        <div class="suite-card-header">
+                            <span class="suite-card-title">Batch Allocation Queues</span>
+                            <div class="suite-table-toolbar">
+                                <input type="text" id="search-batch-input" class="suite-filter-input" placeholder="Search batches...">
+                                <select id="filter-status-select" class="suite-filter-select">
+                                    <option value="all">All Status</option>
+                                    <option value="active">Active</option>
+                                    <option value="paused">Paused</option>
+                                    <option value="completed">Completed</option>
+                                </select>
+                                <button class="btn-ghost" onclick="loadBatches()" style="padding:6px 14px;border-radius:9999px;font-size:0.82rem;">
+                                    ↺ Refresh
+                                </button>
+                            </div>
+                        </div>
+                        <div style="overflow-x: auto;">
+                            <table class="suite-table">
+                                <thead>
+                                    <tr>
+                                        <th>Batch ID / Name</th>
+                                        <th>Assigned Curator</th>
+                                        <th>Images (Done / Total)</th>
+                                        <th>Progress</th>
+                                        <th>Status</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="batchTableBody">
+                                    <tr><td colspan="7" style="text-align:center;padding:24px;color:#94a3b8;">Loading batches...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: User Accounts -->
+                <div id="tab-users" class="tab-content">
+                    <div class="suite-card">
+                        <div class="suite-card-header">
+                            <span class="suite-card-title">System User Directory</span>
+                            <button class="btn-action" style="padding:7px 16px;font-size:0.82rem;" onclick="showModal('createUserModal')">+ New User</button>
+                        </div>
+                        <div style="overflow-x: auto;">
+                            <table class="suite-table">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Role</th>
+                                        <th>Assigned Batches</th>
+                                        <th>Curated Items</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody">
+                                    <tr><td colspan="5" style="text-align:center;padding:24px;color:#94a3b8;">Loading users...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Curator Progress -->
+                <div id="tab-curators" class="tab-content">
+                    <div class="suite-card">
+                        <div class="suite-card-header">
+                            <span class="suite-card-title">Curator Throughput & Speed</span>
+                        </div>
+                        <div id="curatorProgressList" style="padding: 20px;">
+                            <div style="text-align:center;padding:24px;color:#94a3b8;">Loading curator progress...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 4: Pipeline Health -->
+                <div id="tab-health" class="tab-content">
+                    <div class="suite-card">
+                        <div class="suite-card-header">
+                            <span class="suite-card-title">System & Pipeline Diagnostics</span>
+                            <button class="btn-ghost" onclick="checkHealth()" style="padding:6px 14px;border-radius:9999px;font-size:0.82rem;">
+                                ↺ Run Check
+                            </button>
+                        </div>
+                        <div id="healthCheckReport" style="padding: 24px;">
+                            <div style="text-align:center;color:#94a3b8;">Click "Run Check" to perform diagnostics.</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- -------------------------------------------------------------------- -->
+    <!-- MODALS SECTION -->
+    <!-- -------------------------------------------------------------------- -->
+<!-- Create Batch Modal -->
+    <div class="modal-backdrop" id="createBatchModal" onclick="handleBackdropClick(event, 'createBatchModal')">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h3>Allocate Batch Assignment</h3>
+                <button class="modal-close-btn" onclick="closeModal('createBatchModal')">&times;</button>
+            </div>
+            <form id="createBatchForm" onsubmit="handleCreateBatch(event)">
+                <div class="form-group">
+                    <label class="form-label">Target Curator</label>
+                    <select class="form-select" id="batchUserId" required>
+                        <option value="">Select a curator...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Batch Title</label>
+                    <input type="text" class="form-input" id="batchName" placeholder="e.g. High Priority Inferences Batch">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Image Count Slice</label>
+                    <input type="number" class="form-input" id="imageCount" value="50" min="1" max="1000" required>
+                    <small style="color: var(--text-tertiary); margin-top: 6px; display: block;">Available unassigned: <span id="availableCount">-</span></small>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('createBatchModal')">Cancel</button>
+                    <button type="submit" class="btn-action">Create Allocation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create User Modal -->
+    <div class="modal-backdrop" id="createUserModal" onclick="handleBackdropClick(event, 'createUserModal')">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h3>Add User Account</h3>
+                <button class="modal-close-btn" onclick="closeModal('createUserModal')">&times;</button>
+            </div>
+            <form id="createUserForm" onsubmit="handleCreateUser(event)">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" id="newUsername" required placeholder="john_curator">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="newEmail" placeholder="john@example.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="newPassword" required placeholder="••••••••••••">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <select class="form-select" id="newRole">
+                        <option value="curator">Curator</option>
+                        <option value="admin">Administrator</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('createUserModal')">Cancel</button>
+                    <button type="submit" class="btn-action">Create Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
+
+    <!-- -------------------------------------------------------------------- -->
+    <!-- SCRIPTS SECTION -->
+    <!-- -------------------------------------------------------------------- -->
+<script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-pill').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            if (tabId === 'health') checkHealth();
+        }
+
+        function showModal(id) {
+            document.getElementById(id).classList.add('active');
+            if (id === 'createBatchModal') loadUnassignedCount();
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function handleBackdropClick(e, id) {
+            if (e.target.classList.contains('modal-backdrop')) closeModal(id);
+        }
+
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/admin/stats');
+                const data = await res.json();
+                document.getElementById('totalImages').textContent = (data.total_images || 0).toLocaleString();
+                document.getElementById('unassignedImages').textContent = (data.unassigned_images || 0).toLocaleString();
+                document.getElementById('curatedImages').textContent = (data.curated_images || 0).toLocaleString();
+                document.getElementById('activeUsers').textContent = (data.active_users || 0).toLocaleString();
+                renderCuratorProgress(data.user_stats || []);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function renderCuratorProgress(stats) {
+            const grid = document.getElementById('progressGrid');
+            if (!stats || stats.length === 0) {
+                grid.innerHTML = '<div style="color: var(--text-tertiary); padding: 20px;">No curators found.</div>';
+                return;
+            }
+            grid.innerHTML = stats.map(u => {
+                const pct = u.assigned > 0 ? Math.round((u.completed / u.assigned) * 100) : 0;
+                return `
+                    <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border); border-radius: 14px; padding: 18px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <strong style="font-size: 1rem; color: #fff;">${u.username}</strong>
+                            <span class="status-badge status-active">${pct}%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 10px;">
+                            <span>Done: <strong style="color: #34d399;">${u.completed}</strong></span>
+                            <span>Pending: <strong>${u.assigned - u.completed}</strong></span>
+                            <span>Total: <strong>${u.assigned}</strong></span>
+                        </div>
+                        <div class="progress-bar-wrap" style="width: 100%; height: 6px;">
+                            <div class="progress-fill" style="width: ${pct}%;"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function loadBatches() {
+            try {
+                const res = await fetch('/api/admin/batches');
+                const data = await res.json();
+                const tbody = document.getElementById('batchesTable');
+                if (!data.batches || data.batches.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 30px;">No batch assignments yet. Click "+ Assign New Batch" to distribute work.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = data.batches.map(b => {
+                    const pct = b.total_images > 0 ? Math.round((b.actual_completed / b.total_images) * 100) : 0;
+                    return `
+                        <tr>
+                            <td><strong style="color: #fff;">${b.batch_name || 'Batch #' + b.id}</strong></td>
+                            <td>${b.assigned_to_name || '-'}</td>
+                            <td>${b.actual_completed} / ${b.total_images}</td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div class="progress-bar-wrap"><div class="progress-fill" style="width: ${pct}%;"></div></div>
+                                    <span style="font-family: 'JetBrains Mono'; font-size: 0.8rem;">${pct}%</span>
+                                </div>
+                            </td>
+                            <td><span class="status-badge status-${b.status}">${b.status}</span></td>
+                            <td>
+                                <button class="btn-table-sm btn-table-danger" onclick="deleteBatch(${b.id})">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadUsers() {
+            try {
+                const res = await fetch('/api/admin/users');
+                const data = await res.json();
+                const tbody = document.getElementById('usersTable');
+                const select = document.getElementById('batchUserId');
+                select.innerHTML = '<option value="">Select a curator...</option>';
+
+                if (data.users) {
+                    data.users.forEach(u => {
+                        if (u.role === 'curator') {
+                            select.innerHTML += `<option value="${u.id}">${u.username} (${u.email || 'No email'})</option>`;
+                        }
+                    });
+
+                    tbody.innerHTML = data.users.map(u => `
+                        <tr>
+                            <td>#${u.id}</td>
+                            <td><strong style="color: #fff;">${u.username}</strong></td>
+                            <td>${u.email || '-'}</td>
+                            <td><span class="status-badge" style="background: rgba(99, 102, 241, 0.15); color: #a5b4fc;">${u.role}</span></td>
+                            <td><span class="status-badge ${u.is_active ? 'status-active' : 'status-paused'}">${u.is_active ? 'Active' : 'Inactive'}</span></td>
+                            <td>${u.last_login ? new Date(u.last_login).toLocaleDateString() : 'Never'}</td>
+                            <td>
+                                <button class="btn-table-sm btn-table-danger" onclick="deleteUser(${u.id})">Deactivate</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadUnassignedCount() {
+            try {
+                const res = await fetch('/api/admin/unassigned-count');
+                const data = await res.json();
+                document.getElementById('availableCount').textContent = data.unassigned_count || 0;
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function handleCreateBatch(e) {
+            e.preventDefault();
+            const payload = {
+                user_id: parseInt(document.getElementById('batchUserId').value),
+                batch_name: document.getElementById('batchName').value,
+                image_count: parseInt(document.getElementById('imageCount').value)
+            };
+            try {
+                const res = await fetch('/api/admin/batches', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const r = await res.json();
+                if (r.success) {
+                    closeModal('createBatchModal');
+                    loadBatches();
+                    loadStats();
+                } else {
+                    alert(r.error || "Failed to create batch");
+                }
+            } catch (err) {
+                alert("Network error");
+            }
+        }
+
+        async function handleCreateUser(e) {
+            e.preventDefault();
+            const payload = {
+                username: document.getElementById('newUsername').value,
+                email: document.getElementById('newEmail').value,
+                password: document.getElementById('newPassword').value,
+                role: document.getElementById('newRole').value
+            };
+            try {
+                const res = await fetch('/api/admin/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const r = await res.json();
+                if (r.success) {
+                    closeModal('createUserModal');
+                    loadUsers();
+                    loadStats();
+                } else {
+                    alert(r.error || "Failed to create user");
+                }
+            } catch (err) {
+                alert("Network error");
+            }
+        }
+
+        async function deleteBatch(id) {
+            if (!confirm("Are you sure you want to delete this batch assignment?")) return;
+            await fetch(`/api/admin/batches/${id}`, { method: 'DELETE' });
+            loadBatches();
+            loadStats();
+        }
+
+        async function deleteUser(id) {
+            if (!confirm("Are you sure you want to deactivate this user?")) return;
+            await fetch(`/api/admin/users/${id}`, { method: 'DELETE' });
+            loadUsers();
+            loadStats();
+        }
+
+        async function checkHealth() {
+            const report = document.getElementById('healthReport');
+            report.innerHTML = '<div style="color: var(--text-tertiary);">Analyzing assignment matrix...</div>';
+            try {
+                const res = await fetch('/api/admin/assignment-health');
+                const data = await res.json();
+                report.innerHTML = `
+                    <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 16px; margin-bottom: 14px;">
+                        <strong style="color: #34d399; font-size: 1rem;">Status: ${data.status.toUpperCase()}</strong>
+                        <div style="margin-top: 8px; color: var(--text-secondary); font-size: 0.88rem;">
+                            Duplicate assignments: <strong>${data.duplicate_assignments}</strong> • Multi-batch collisions: <strong>${data.multi_batch_assignments}</strong>
+                        </div>
+                    </div>
+                `;
+            } catch (err) {
+                report.innerHTML = '<div style="color: #fda4af;">Failed to run health check.</div>';
+            }
+        }
+
+        loadStats();
+        loadBatches();
+        loadUsers();
+    </script>
+
+</body>
+</html>

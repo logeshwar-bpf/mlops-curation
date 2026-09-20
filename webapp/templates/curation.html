@@ -1,0 +1,2210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLOps Curation — Intelligent Workstation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/themes.css?v=7.0">
+    <script src="/static/instant-nav.js?v=7.0"></script>
+    <style>
+        html {
+            background-color: #080c14 !important;
+            color-scheme: dark;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            letter-spacing: normal !important;
+        }
+
+        :root {
+            --bg-canvas: #080c14;
+            --glass-panel: rgba(15, 23, 42, 0.78);
+            --glass-card: rgba(18, 26, 45, 0.72);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-border-hover: rgba(139, 92, 246, 0.45);
+            --accent-primary: #6366f1;
+            --accent-violet: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --gender-male: #3b82f6;
+            --gender-female: #ec4899;
+            --age-infant: #f59e0b;
+            --age-child: #10b981;
+            --age-teen: #06b6d4;
+            --age-adult: #6366f1;
+            --age-mature: #8b5cf6;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #94a3b8;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #080c14 !important;
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+            letter-spacing: normal !important;
+            line-height: 1.5;
+        }
+
+        /* Ambient Dynamic Blur Aurora Background */
+        .ambient-aurora {
+            position: fixed;
+            inset: -40%;
+            width: 180%;
+            height: 180%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            background: 
+                radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.20) 0%, transparent 45%),
+                radial-gradient(circle at 85% 20%, rgba(139, 92, 246, 0.18) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.10) 0%, transparent 60%),
+                radial-gradient(circle at 20% 85%, rgba(236, 72, 153, 0.12) 0%, transparent 50%),
+                linear-gradient(180deg, #070a12 0%, #0a0e1a 45%, #050811 100%);
+        }
+
+        .aurora-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.25;
+            animation: ambientShift 24s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, #6c8cff 0%, rgba(108, 140, 255, 0) 70%);
+            top: 20%;
+            left: 15%;
+        }
+
+        .orb-2 {
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, #7de2d1 0%, rgba(125, 226, 209, 0) 70%);
+            top: 50%;
+            right: 15%;
+            animation-duration: 28s;
+            animation-delay: -6s;
+        }
+
+        .orb-3 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #b79cff 0%, rgba(183, 156, 255, 0) 70%);
+            bottom: 10%;
+            left: 40%;
+            animation-duration: 22s;
+            animation-delay: -12s;
+        }
+
+        @keyframes ambientShift {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(60px, -40px) scale(1.08); }
+            100% { transform: translate(-40px, 50px) scale(0.95); }
+        }
+
+        /* Progress pill in Photo Stream header */
+        .progress-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.74rem;
+            color: #cbd5e1;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+        .progress-pill span.num {
+            color: #10b981;
+            font-weight: 700;
+        }
+
+        /* Workstation Layout */
+        .workspace-layout {
+            display: grid;
+            grid-template-columns: 310px 1fr 390px;
+            gap: 16px;
+            height: 100vh;
+            margin-top: 0;
+            padding: 36px 24px 24px 24px;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        /* ─────────────────────────────────────
+           Left Column: Rich Photo Stream Queue
+           ───────────────────────────────────── */
+        .queue-panel {
+            background: rgba(13, 19, 34, 0.82);
+            backdrop-filter: blur(28px) saturate(190%);
+            -webkit-backdrop-filter: blur(28px) saturate(190%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.45);
+            position: relative;
+        }
+
+        .panel-header {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: rgba(18, 26, 45, 0.6);
+        }
+
+        .panel-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #f8fafc;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: normal;
+        }
+
+        .panel-title span.icon {
+            font-size: 1.1rem;
+        }
+
+        .queue-badge {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.74rem;
+            font-weight: 600;
+            background: rgba(99, 102, 241, 0.18);
+            color: #c7d2fe;
+            padding: 3px 10px;
+            border-radius: 50px;
+            border: 1px solid rgba(99, 102, 241, 0.35);
+        }
+
+        .panel-controls-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+        }
+
+        .view-mode-toggles {
+            display: flex;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 2px;
+            gap: 2px;
+        }
+
+        .view-toggle-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.78rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 600;
+            letter-spacing: normal;
+            transition: all 0.2s ease;
+        }
+
+        .view-toggle-btn.active {
+            background: rgba(99, 102, 241, 0.3);
+            color: #ffffff;
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            box-shadow: 0 1px 4px rgba(99, 102, 241, 0.25);
+        }
+
+        .filter-select {
+            background: rgba(18, 26, 45, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #f8fafc;
+            font-size: 0.74rem;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            letter-spacing: normal;
+            padding: 4px 8px;
+            border-radius: 8px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .queue-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-auto-rows: 175px;
+            gap: 12px;
+            align-content: start;
+        }
+
+        .queue-list.list-view {
+            grid-template-columns: 1fr;
+            grid-auto-rows: auto;
+            gap: 8px;
+            padding: 10px 12px;
+        }
+
+        .queue-list::-webkit-scrollbar {
+            width: 5px;
+        }
+        .queue-list::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.15);
+        }
+        .queue-list::-webkit-scrollbar-thumb {
+            background: rgba(124, 58, 237, 0.3);
+            border-radius: 4px;
+        }
+        .queue-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(124, 58, 237, 0.6);
+        }
+
+        /* Photo Thumbnail Card - Grid Mode (Default 175px Height, Never Collapses) */
+        .thumb-card {
+            position: relative;
+            width: 100%;
+            height: 175px;
+            min-height: 175px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1.5px solid rgba(255, 255, 255, 0.08);
+            background: #0b1120;
+            cursor: pointer;
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+            display: block;
+            box-sizing: border-box;
+        }
+
+        .thumb-card:hover {
+            transform: translateY(-3px) scale(1.02);
+            border-color: rgba(139, 92, 246, 0.65);
+            box-shadow: 0 8px 24px -4px rgba(124, 58, 237, 0.4);
+        }
+
+        .thumb-card.active {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.4), 0 8px 24px -4px rgba(0, 0, 0, 0.7);
+            transform: translateY(-2px) scale(1.02);
+            z-index: 2;
+        }
+
+        .thumb-card img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            background: #080c18;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .thumb-card:hover img {
+            transform: scale(1.06);
+        }
+
+        /* Overlay Index Badge (Grid Mode) */
+        .thumb-index {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(9, 14, 28, 0.82);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #f8fafc;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            pointer-events: none;
+            z-index: 3;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.02em;
+        }
+
+        /* Overlay Category Label (Grid Mode Footer) */
+        .thumb-meta {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 24px 8px 7px 8px;
+            background: linear-gradient(to top, rgba(7, 11, 22, 0.95) 0%, rgba(7, 11, 22, 0.7) 60%, transparent 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: #cbd5e1;
+            pointer-events: none;
+            z-index: 2;
+            gap: 4px;
+        }
+
+        .thumb-meta .grid-tags-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            overflow: hidden;
+        }
+
+        .thumb-meta span.vlm-tag {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(4px);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.64rem;
+            font-weight: 600;
+            text-transform: capitalize;
+            color: #f1f5f9;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .thumb-meta .role-indicator {
+            font-size: 0.82rem;
+            filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));
+            flex-shrink: 0;
+        }
+
+        /* Curated Checkmark Badge (Grid Mode) */
+        .thumb-card.curated::after {
+            content: '✓';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 800;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.6);
+            z-index: 3;
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ─────────────────────────────────────
+           List View Mode (Default Curation Layout)
+           ───────────────────────────────────── */
+        .queue-list.list-view .thumb-card {
+            width: 100%;
+            height: 64px;
+            min-height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 6px 10px;
+            gap: 10px;
+            background: rgba(14, 21, 38, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+            position: relative;
+        }
+
+        .queue-list.list-view .thumb-card:hover {
+            background: rgba(22, 33, 58, 0.85);
+            border-color: rgba(139, 92, 246, 0.4);
+            transform: translateX(2px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+        }
+
+        .queue-list.list-view .thumb-card.active {
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.12) 100%);
+            border-color: #6366f1;
+            box-shadow: 0 0 0 1.5px rgba(99, 102, 241, 0.45), 0 4px 16px rgba(0, 0, 0, 0.4);
+            transform: translateX(2px);
+        }
+
+        .queue-list.list-view .thumb-card img {
+            position: static;
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .queue-list.list-view .list-seq-pill {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #94a3b8;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 4px 7px;
+            min-width: 32px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .queue-list.list-view .thumb-card.active .list-seq-pill {
+            background: rgba(99, 102, 241, 0.3);
+            border-color: rgba(99, 102, 241, 0.5);
+            color: #ffffff;
+        }
+
+        .queue-list.list-view .list-card-details {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            overflow: hidden;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .queue-list.list-view .list-card-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            font-family: 'DM Mono', monospace;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .queue-list.list-view .list-card-tags {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            flex-wrap: nowrap;
+            overflow: hidden;
+        }
+
+        .queue-list.list-view .tag-pill {
+            font-size: 0.65rem;
+            font-weight: 500;
+            padding: 1px 6px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.06);
+            color: #94a3b8;
+            text-transform: capitalize;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            white-space: nowrap;
+        }
+
+        .queue-list.list-view .tag-pill.tag-male {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #93c5fd;
+        }
+        .queue-list.list-view .tag-pill.tag-female {
+            background: rgba(236, 72, 153, 0.15);
+            border-color: rgba(236, 72, 153, 0.3);
+            color: #f9a8d4;
+        }
+        .queue-list.list-view .tag-pill.tag-age {
+            background: rgba(139, 92, 246, 0.15);
+            border-color: rgba(139, 92, 246, 0.3);
+            color: #c4b5fd;
+        }
+
+        .queue-list.list-view .list-status-badge {
+            margin-left: auto;
+            flex-shrink: 0;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .queue-list.list-view .list-status-badge.curated {
+            background: rgba(16, 185, 129, 0.16);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            color: #34d399;
+        }
+        .queue-list.list-view .list-status-badge.pending {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            color: #64748b;
+        }
+
+        /* In list view, hide grid pseudo ::after checkmark so it doesn't collide with list status badge */
+        .queue-list.list-view .thumb-card.curated::after {
+            display: none !important;
+        }
+
+        /* Center Column: Hero Inspection Viewport */
+        .viewport-panel {
+            background: rgba(13, 19, 34, 0.82);
+            backdrop-filter: blur(28px) saturate(190%);
+            -webkit-backdrop-filter: blur(28px) saturate(190%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.45);
+            position: relative;
+        }
+
+        .viewport-canvas {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            position: relative;
+            background: rgba(8, 12, 22, 0.65);
+        }
+
+        .image-halo {
+            position: absolute;
+            width: 340px;
+            height: 340px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.22) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(45px);
+            pointer-events: none;
+            transition: all 0.5s ease;
+        }
+
+        .hero-image-wrapper {
+            position: relative;
+            max-width: 90%;
+            max-height: 85%;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+            cursor: zoom-in;
+            transition: transform 0.25s ease;
+            background: #050811;
+        }
+
+        .hero-image-wrapper:hover {
+            transform: scale(1.015);
+        }
+
+        .hero-image-wrapper img {
+            max-width: 100%;
+            max-height: 60vh;
+            display: block;
+            object-fit: contain;
+            user-select: none;
+        }
+
+        .image-metadata-bar {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(13, 19, 34, 0.88);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 6px 16px;
+            border-radius: 9999px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.76rem;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            pointer-events: none;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .viewport-controls {
+            padding: 12px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(13, 19, 34, 0.82);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-step-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #cbd5e1;
+            padding: 7px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.84rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.18s ease;
+        }
+
+        .nav-step-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(139, 92, 246, 0.45);
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Right Column: Curation Deck (Rich Dark Glassmorphism) */
+        /* Right Column: Curation Deck (Elite Studio Card Architecture) */
+        .curation-deck {
+            background: rgba(13, 19, 34, 0.88) !important;
+            backdrop-filter: blur(28px) saturate(190%) !important;
+            -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.09) !important;
+            border-radius: 24px !important;
+            padding: 16px 18px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow-y: auto !important;
+            box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.55) !important;
+            gap: 10px !important;
+        }
+
+        .curation-deck::-webkit-scrollbar {
+            width: 5px;
+        }
+        .curation-deck::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+
+        /* Deck Top Header Bar */
+        .deck-top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .deck-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .deck-pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 10px #10b981;
+            animation: pulseDot 2s infinite;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.6; }
+        }
+
+        .deck-title {
+            font-size: 0.74rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            color: #f1f5f9;
+            text-transform: uppercase;
+        }
+
+        .deck-status-pill {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.68rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            background: rgba(99, 102, 241, 0.18);
+            color: #c7d2fe;
+            border: 1px solid rgba(99, 102, 241, 0.35);
+        }
+
+        /* VLM Inference Comparison Card */
+        .vlm-preview-card {
+            background: rgba(99, 102, 241, 0.08);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            border-radius: 12px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .vlm-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vlm-ai-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: #a5b4fc;
+            font-weight: 700;
+        }
+
+        .btn-apply-prior {
+            background: rgba(99, 102, 241, 0.22);
+            border: 1px solid rgba(99, 102, 241, 0.45);
+            color: #ffffff;
+            padding: 3px 9px;
+            border-radius: 6px;
+            font-size: 0.70rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .btn-apply-prior:hover {
+            background: rgba(99, 102, 241, 0.45);
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .vlm-tags-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .vlm-tag {
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            color: #e2e8f0;
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .vlm-tag .tag-label { color: #94a3b8; font-weight: 500; }
+        .vlm-tag .tag-val { color: #67e8f9; font-weight: 600; }
+
+        /* Structured Curation Category Cards */
+        .curation-section-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 12px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: border-color 0.2s ease;
+        }
+
+        .curation-section-card:hover {
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .section-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-title-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-icon {
+            font-size: 0.90rem;
+        }
+
+        .section-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: #94a3b8;
+        }
+
+        .section-hotkey-hint {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.66rem;
+            color: #64748b;
+        }
+
+        .pill-grid {
+            display: grid;
+            gap: 6px;
+        }
+
+        .grid-2 { grid-template-columns: 1fr 1fr; }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-5 { grid-template-columns: repeat(5, 1fr); }
+
+        /* Structured Age Grid */
+        .grid-age-structured {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .grid-age-structured .pill-mature {
+            grid-column: span 2;
+        }
+
+        /* Selector Pills (Dark Glass with ZERO White) */
+        .selector-pill {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.09) !important;
+            padding: 9px 12px !important;
+            border-radius: 10px !important;
+            cursor: pointer !important;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+            font-size: 0.86rem !important;
+            font-weight: 600 !important;
+            color: #cbd5e1 !important;
+            transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 6px !important;
+            user-select: none !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .selector-pill small {
+            font-size: 0.72rem;
+            font-weight: 500;
+            opacity: 0.75;
+        }
+
+        .selector-pill .pill-badge {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.64rem;
+            padding: 1px 5px;
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.4);
+            color: #94a3b8;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            line-height: 1.2;
+        }
+
+        .selector-pill:hover {
+            background: rgba(255, 255, 255, 0.10) !important;
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.22) !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
+        }
+
+        /* Luminous Alternative Colors for Selected Pills */
+        .selector-pill.selected {
+            background: rgba(99, 102, 241, 0.24) !important;
+            border-color: #818cf8 !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 16px rgba(99, 102, 241, 0.40), inset 0 0 8px rgba(99, 102, 241, 0.25) !important;
+            font-weight: 700 !important;
+        }
+
+        .selector-pill.selected .pill-badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Male: Electric Blue Neon */
+        .selector-pill.selected[data-field="gender"][data-value="male"] {
+            background: rgba(59, 130, 246, 0.22) !important;
+            border-color: #3b82f6 !important;
+            color: #93c5fd !important;
+            box-shadow: 0 0 18px rgba(59, 130, 246, 0.45), inset 0 0 10px rgba(59, 130, 246, 0.25) !important;
+        }
+
+        /* Female: Neon Pink / Magenta */
+        .selector-pill.selected[data-field="gender"][data-value="female"] {
+            background: rgba(236, 72, 153, 0.22) !important;
+            border-color: #ec4899 !important;
+            color: #f472b6 !important;
+            box-shadow: 0 0 18px rgba(236, 72, 153, 0.45), inset 0 0 10px rgba(236, 72, 153, 0.25) !important;
+        }
+
+        /* Customer: Emerald Green Glow */
+        .selector-pill.selected[data-field="staff"][data-value="false"] {
+            background: rgba(16, 185, 129, 0.22) !important;
+            border-color: #10b981 !important;
+            color: #6ee7b7 !important;
+            box-shadow: 0 0 18px rgba(16, 185, 129, 0.45), inset 0 0 10px rgba(16, 185, 129, 0.25) !important;
+        }
+
+        /* Staff: Amber / Gold Glow */
+        .selector-pill.selected[data-field="staff"][data-value="true"] {
+            background: rgba(245, 158, 11, 0.22) !important;
+            border-color: #f59e0b !important;
+            color: #fcd34d !important;
+            box-shadow: 0 0 18px rgba(245, 158, 11, 0.45), inset 0 0 10px rgba(245, 158, 11, 0.25) !important;
+        }
+
+        /* Age specific luminous glows */
+        .selector-pill.selected[data-field="age"][data-value="infant"] {
+            background: rgba(245, 158, 11, 0.22) !important;
+            border-color: #f59e0b !important;
+            color: #fcd34d !important;
+            box-shadow: 0 0 16px rgba(245, 158, 11, 0.40) !important;
+        }
+
+        .selector-pill.selected[data-field="age"][data-value="child"] {
+            background: rgba(16, 185, 129, 0.22) !important;
+            border-color: #10b981 !important;
+            color: #6ee7b7 !important;
+            box-shadow: 0 0 16px rgba(16, 185, 129, 0.40) !important;
+        }
+
+        .selector-pill.selected[data-field="age"][data-value="teen"] {
+            background: rgba(6, 182, 212, 0.22) !important;
+            border-color: #06b6d4 !important;
+            color: #67e8f9 !important;
+            box-shadow: 0 0 16px rgba(6, 182, 212, 0.40) !important;
+        }
+
+        .selector-pill.selected[data-field="age"][data-value="adult"] {
+            background: rgba(99, 102, 241, 0.22) !important;
+            border-color: #6366f1 !important;
+            color: #a5b4fc !important;
+            box-shadow: 0 0 16px rgba(99, 102, 241, 0.40) !important;
+        }
+
+        .selector-pill.selected[data-field="age"][data-value="mature"] {
+            background: rgba(139, 92, 246, 0.22) !important;
+            border-color: #8b5cf6 !important;
+            color: #c4b5fd !important;
+            box-shadow: 0 0 16px rgba(139, 92, 246, 0.40) !important;
+        }
+
+        /* Quality Chips Row */
+        .card-quality {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .quality-chips-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .quality-chip {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #94a3b8;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.74rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            user-select: none;
+        }
+
+        .quality-chip:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #cbd5e1;
+        }
+
+        .quality-chip.active {
+            background: rgba(16, 185, 129, 0.18);
+            border-color: #10b981;
+            color: #6ee7b7;
+            font-weight: 600;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+        }
+
+        /* Action Buttons & Dock */
+        .action-row {
+            margin-top: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            width: 100%;
+        }
+
+        .btn-curate-save {
+            width: 100% !important;
+            padding: 12px 16px !important;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.25) !important;
+            border-radius: 12px !important;
+            color: #ffffff !important;
+            font-family: 'Inter', sans-serif !important;
+            font-size: 0.94rem !important;
+            font-weight: 700 !important;
+            cursor: pointer !important;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.45) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 10px !important;
+            box-sizing: border-box !important;
+        }
+
+        .btn-curate-save:hover {
+            transform: translateY(-1px) !important;
+            box-shadow: 0 8px 28px rgba(139, 92, 246, 0.65) !important;
+            filter: brightness(1.08) !important;
+        }
+
+        .btn-curate-save:active {
+            transform: translateY(0) !important;
+        }
+
+        .keycap {
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-bottom: 2px solid rgba(0, 0, 0, 0.7);
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.7rem;
+            color: #cbd5e1;
+            font-weight: 700;
+        }
+
+        .keycap-accent {
+            background: rgba(0, 0, 0, 0.35) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.5) !important;
+            color: #ffffff !important;
+        }
+
+        .secondary-actions {
+            display: flex !important;
+            gap: 8px !important;
+            width: 100% !important;
+            align-items: stretch !important;
+        }
+
+        .secondary-actions .btn-ghost {
+            flex: 1 1 0% !important;
+            width: 100% !important;
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            padding: 9px 14px !important;
+            border-radius: 10px !important;
+            color: #cbd5e1 !important;
+            font-family: 'Inter', sans-serif !important;
+            font-size: 0.86rem !important;
+            font-weight: 600 !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+            box-sizing: border-box !important;
+        }
+
+        .secondary-actions .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.10) !important;
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.22) !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .secondary-actions .btn-ghost:active {
+            transform: translateY(0) !important;
+        }
+
+        .deck-hotkeys-footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.66rem;
+            color: #64748b;
+            font-family: 'DM Mono', monospace;
+            padding-top: 4px;
+            text-align: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-undo {
+            display: none !important;
+            background: rgba(245, 158, 11, 0.15) !important;
+            border: 1px solid rgba(245, 158, 11, 0.35) !important;
+            color: #fbbf24 !important;
+        }
+
+        .btn-undo:hover {
+            background: rgba(245, 158, 11, 0.25) !important;
+            border-color: rgba(245, 158, 11, 0.5) !important;
+            color: #ffffff !important;
+        }
+
+        .btn-undo.visible {
+            display: flex !important;
+        }
+
+        /* Lightbox Zoom Modal */
+        .lightbox-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .lightbox-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .lightbox-content {
+            max-width: 90vw;
+            max-height: 90vh;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #0b101c;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 85vh;
+            display: block;
+        }
+
+        /* Shortcuts Modal */
+        .shortcuts-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .shortcuts-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .shortcuts-card {
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(28px) saturate(180%);
+            -webkit-backdrop-filter: blur(28px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+            padding: 34px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6);
+            color: #f8fafc;
+        }
+
+        .shortcuts-card h3 {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        .shortcut-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.88rem;
+            color: #cbd5e1;
+        }
+
+        /* Toast notifications */
+        .toast-deck {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast-pill {
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 12px 18px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #f8fafc;
+            font-size: 0.88rem;
+            font-weight: 600;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .toast-pill.success {
+            border-left: 4px solid #10b981;
+        }
+        .toast-pill.error {
+            border-left: 4px solid #ef4444;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="suite-ambient-mesh"></div>
+
+    <div class="suite-shell">
+        <!-- LEFT SIDEBAR -->
+        <aside class="suite-sidebar">
+            <div class="suite-sidebar-resizer" id="suiteSidebarResizer" title="Hold and drag to resize sidebar"></div>
+            <div class="suite-sidebar-header">
+                <a href="/main" class="suite-sidebar-brand" title="MLops curation" data-tooltip="MLops curation">
+                    <div class="suite-brand-text">
+                        <div class="brand-line-primary">ML<span class="brand-ops">ops</span></div>
+                        <div class="brand-line-secondary">curation</div>
+                    </div>
+                    <div class="suite-brand-shrunk" aria-hidden="true">
+                        <span class="shrunk-ml">ML</span>
+                        <span class="shrunk-ops">ops</span>
+                    </div>
+                </a>
+            </div>
+
+            <ul class="suite-nav-group">
+                <li>
+                    <a href="/main" class="suite-nav-item" data-tooltip="Dashboard" title="Dashboard">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="9" x="3" y="3" rx="1"/>
+                            <rect width="7" height="5" x="14" y="3" rx="1"/>
+                            <rect width="7" height="9" x="14" y="12" rx="1"/>
+                            <rect width="7" height="5" x="3" y="16" rx="1"/>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/curation" class="suite-nav-item active" data-tooltip="Curation" title="Curation">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <circle cx="12" cy="12" r="6"/>
+                            <circle cx="12" cy="12" r="2"/>
+                        </svg>
+                        <span>Curation</span>
+                    </a>
+                </li>
+                {% if role == 'admin' %}
+                <li>
+                    <a href="/admin" class="suite-nav-item" data-tooltip="Admin Panel" title="Admin Panel">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        <span>Admin</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/training" class="suite-nav-item" data-tooltip="MLOps Training" title="MLOps Training">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                        <span>MLOps</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+            <div class="suite-sidebar-spacer"></div>
+
+            <!-- Sidebar User Profile & Notifications -->
+            <div class="suite-sidebar-footer">
+                <a href="/logout" class="suite-profile-chip" title="{{ user }} ({{ 'Administrator' if (role and role|lower == 'admin') else (role | capitalize or 'Administrator') }}) • Click to Logout" data-tooltip="{{ user }} • Logout">
+                    <div class="suite-avatar">{{ user[0].upper() }}</div>
+                    <div class="suite-user-meta">
+                        <span class="suite-user-name">{{ user }}</span>
+                        <span class="suite-user-role">{{ 'Administrator' if (role and role|lower == 'admin') else (role | capitalize or 'Administrator') }}</span>
+                    </div>
+                </a>
+                <div class="suite-notif-btn" title="Notifications" data-tooltip="Notifications">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                    </svg>
+                    <span class="suite-notif-badge"></span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN AREA -->
+        <div class="suite-main" style="height: 100vh; overflow: hidden; display: flex; flex-direction: column; min-width: 0; width: 100%;">
+            <!-- 3-Column Layout -->
+            <div class="workspace-layout" style="flex: 1; min-height: 0; height: 100vh; border-top: none; margin: 0; padding: 36px 24px 24px 24px; box-sizing: border-box;">
+        <!-- Left: Image Queue Strip -->
+        <aside class="queue-panel">
+            <div class="panel-header">
+                <div class="panel-header-top">
+                    <span class="panel-title">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                        <span>Photo Stream</span>
+                    </span>
+                    <span class="queue-badge" id="queue-badge">0 crops</span>
+                </div>
+                <div class="panel-controls-row">
+                    <div class="view-mode-toggles">
+                        <button class="view-toggle-btn active" id="btnViewList" onclick="setQueueView('list')" title="List View (Default)">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
+                            <span>List</span>
+                        </button>
+                        <button class="view-toggle-btn" id="btnViewGrid" onclick="setQueueView('grid')" title="Grid View">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3"/><rect width="7" height="7" x="14" y="3"/><rect width="7" height="7" x="14" y="14"/><rect width="7" height="7" x="3" y="14"/></svg>
+                            <span>Grid</span>
+                        </button>
+                    </div>
+                    <div class="progress-pill" style="margin: 0; padding: 2px 8px; font-size: 0.72rem;">
+                        <span>Curated:</span>
+                        <span class="num" id="curated-count">0</span>/<span id="total-count">0</span>
+                    </div>
+                    <select class="filter-select" id="queueFilter" onchange="filterQueue(this.value)">
+                        <option value="all">All</option>
+                        <option value="pending">Pending</option>
+                        <option value="curated">Curated</option>
+                    </select>
+                </div>
+            </div>
+            <div class="queue-list list-view" id="queueList">
+                <!-- Thumbnails injected via JS -->
+            </div>
+        </aside>
+
+        <!-- Center: Hero Viewport -->
+        <main class="viewport-panel">
+            <div class="viewport-canvas" id="viewportCanvas">
+                <!-- Inspection Toolbar -->
+                <div class="image-inspect-bar">
+                    <button class="inspect-tool-btn" id="btnCrosshair" onclick="toggleCrosshair()" title="Toggle Crosshairs [G]">🎯</button>
+                    <button class="inspect-tool-btn" id="btnContrast" onclick="toggleFilter('contrast')" title="Boost Contrast [C]">🌓</button>
+                    <button class="inspect-tool-btn" id="btnBrightness" onclick="toggleFilter('brightness')" title="Boost Brightness [B]">☀️</button>
+                    <button class="inspect-tool-btn" id="btnInvert" onclick="toggleFilter('invert')" title="Invert Colors [I]">🔄</button>
+                    <button class="inspect-tool-btn" onclick="resetFilters()" title="Reset Filters">↺</button>
+                </div>
+
+                <div class="crosshair-overlay" id="crosshairOverlay">
+                    <div class="crosshair-h"></div>
+                    <div class="crosshair-v"></div>
+                </div>
+
+                <div class="image-halo" id="imageHalo"></div>
+                <div class="hero-image-wrapper" id="heroWrapper" onclick="openLightbox()">
+                    <img id="heroImage" src="" alt="Active crop">
+                </div>
+                <div class="image-metadata-bar" id="metaBar">
+                    <span id="meta-store">Store #--</span>
+                    <span>•</span>
+                    <span id="meta-uuid">UUID: -------</span>
+                    <span>•</span>
+                    <span>🔍 Click to zoom</span>
+                </div>
+            </div>
+
+            <div class="viewport-controls">
+                <button class="nav-step-btn" onclick="goToPrev()" title="Previous Image [←]">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                    <span>Previous <span class="keycap">←</span></span>
+                </button>
+                <div style="font-size: 0.82rem; color: var(--text-tertiary); font-family: 'JetBrains Mono', monospace;" id="image-pos-indicator">
+                    Image 0 of 0
+                </div>
+                <button class="nav-step-btn" onclick="goToNext()" title="Next Image [→]">
+                    <span>Next <span class="keycap">→</span></span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+                </button>
+            </div>
+        </main>
+
+        <!-- Right: Curation Deck -->
+        <aside class="curation-deck">
+            <!-- Deck Top Header Bar -->
+            <div class="deck-top-bar">
+                <div class="deck-title-wrap">
+                    <span class="deck-pulse-dot"></span>
+                    <span class="deck-title">INSPECTION &amp; CURATION</span>
+                </div>
+                <span class="deck-status-pill">AI ASSISTED</span>
+            </div>
+
+            <!-- VLM Inference Prior Card -->
+            <div class="vlm-preview-card">
+                <div class="vlm-card-header">
+                    <span class="vlm-ai-label">🤖 VLM Inference Prior</span>
+                    <button type="button" class="btn-apply-prior" onclick="applyVlmPriors()" title="Auto-fill with VLM model prediction">⚡ Apply Prior</button>
+                </div>
+                <div class="vlm-tags-row">
+                    <div class="vlm-tag" id="vlm-gender"><span class="tag-label">Gender:</span> <span class="tag-val">-</span></div>
+                    <div class="vlm-tag" id="vlm-age"><span class="tag-label">Age:</span> <span class="tag-val">-</span></div>
+                    <div class="vlm-tag" id="vlm-staff"><span class="tag-label">Type:</span> <span class="tag-val">-</span></div>
+                </div>
+            </div>
+
+            <!-- Category 1: Gender Classification Card -->
+            <div class="curation-section-card">
+                <div class="section-card-header">
+                    <div class="section-title-group">
+                        <span class="section-icon">🚻</span>
+                        <span class="section-title">Gender Classification</span>
+                    </div>
+                    <span class="section-hotkey-hint">M / F</span>
+                </div>
+                <div class="pill-grid grid-2">
+                    <div class="selector-pill" data-field="gender" data-value="male" onclick="selectOption('gender', 'male')">
+                        <span>👨 Male</span>
+                        <span class="pill-badge">M</span>
+                    </div>
+                    <div class="selector-pill" data-field="gender" data-value="female" onclick="selectOption('gender', 'female')">
+                        <span>👩 Female</span>
+                        <span class="pill-badge">F</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 2: Age Estimation Card -->
+            <div class="curation-section-card">
+                <div class="section-card-header">
+                    <div class="section-title-group">
+                        <span class="section-icon">🎂</span>
+                        <span class="section-title">Age Estimation</span>
+                    </div>
+                    <span class="section-hotkey-hint">1 - 5</span>
+                </div>
+                <div class="grid-age-structured">
+                    <div class="selector-pill" data-field="age" data-value="infant" onclick="selectOption('age', 'infant')">
+                        <span>Infant <small style="color: #94a3b8; font-size: 0.72rem;">(0-2)</small></span>
+                        <span class="pill-badge">1</span>
+                    </div>
+                    <div class="selector-pill" data-field="age" data-value="child" onclick="selectOption('age', 'child')">
+                        <span>Child <small style="color: #94a3b8; font-size: 0.72rem;">(3-12)</small></span>
+                        <span class="pill-badge">2</span>
+                    </div>
+                    <div class="selector-pill" data-field="age" data-value="teen" onclick="selectOption('age', 'teen')">
+                        <span>Teen <small style="color: #94a3b8; font-size: 0.72rem;">(13-19)</small></span>
+                        <span class="pill-badge">3</span>
+                    </div>
+                    <div class="selector-pill" data-field="age" data-value="adult" onclick="selectOption('age', 'adult')">
+                        <span>Adult <small style="color: #94a3b8; font-size: 0.72rem;">(20-59)</small></span>
+                        <span class="pill-badge">4</span>
+                    </div>
+                    <div class="selector-pill pill-mature" data-field="age" data-value="mature" onclick="selectOption('age', 'mature')">
+                        <span>Mature <small style="color: #94a3b8; font-size: 0.72rem;">(60+)</small></span>
+                        <span class="pill-badge">5</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 3: Staff vs Customer Card -->
+            <div class="curation-section-card">
+                <div class="section-card-header">
+                    <div class="section-title-group">
+                        <span class="section-icon">🏷️</span>
+                        <span class="section-title">Staff vs Customer</span>
+                    </div>
+                    <span class="section-hotkey-hint">C / S</span>
+                </div>
+                <div class="pill-grid grid-2">
+                    <div class="selector-pill" data-field="staff" data-value="false" onclick="selectOption('staff', 'false')">
+                        <span>🛒 Customer</span>
+                        <span class="pill-badge">C</span>
+                    </div>
+                    <div class="selector-pill" data-field="staff" data-value="true" onclick="selectOption('staff', 'true')">
+                        <span>👔 Staff</span>
+                        <span class="pill-badge">S</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 4: Annotation Quality Card -->
+            <div class="curation-section-card card-quality">
+                <div class="section-card-header">
+                    <div class="section-title-group">
+                        <span class="section-icon">🛡️</span>
+                        <span class="section-title">Data Quality Flags</span>
+                    </div>
+                    <span class="section-hotkey-hint">Optional</span>
+                </div>
+                <div class="quality-chips-row">
+                    <div class="quality-chip active" id="chip-verified" onclick="toggleQualityChip(this)">
+                        <span>✓ Verified Ground Truth</span>
+                    </div>
+                    <div class="quality-chip" id="chip-high-conf" onclick="toggleQualityChip(this)">
+                        <span>★ High Confidence</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Controls & Hotkeys Footer -->
+            <div class="action-row">
+                <button class="btn-curate-save" id="saveBtn" onclick="saveCuration()">
+                    <span>Save & Next</span>
+                    <span class="keycap keycap-accent">↵ Enter</span>
+                </button>
+                <div class="secondary-actions">
+                    <button class="btn-ghost btn-skip" id="skipBtn" onclick="skipImage()">
+                        <span>Skip Image</span>
+                        <span class="keycap">Space</span>
+                    </button>
+                    <button class="btn-ghost btn-undo" id="undoBtn" onclick="undoLastCuration()">
+                        <span>↺ Undo (<span id="undo-timer">10</span>s)</span>
+                    </button>
+                </div>
+                <div class="deck-hotkeys-footer">
+                    <span>↵ Save</span> • <span>Space Skip</span> • <span>M/F Gender</span> • <span>1-5 Age</span> • <span>C/S Role</span>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+
+
+        </div> <!-- /suite-main -->
+    </div> <!-- /suite-shell -->
+
+    <!-- Zoom Lightbox Modal -->
+    <div class="lightbox-modal" id="lightboxModal" onclick="closeLightbox(event)">
+        <div class="lightbox-content">
+            <img id="lightboxImg" src="" alt="Zoomed Crop">
+        </div>
+    </div>
+
+    <!-- Shortcuts Modal -->
+    <div class="shortcuts-modal" id="shortcutsModal" onclick="hideShortcuts(event)">
+        <div class="shortcuts-card">
+            <h3>⚡ Keyboard Shortcuts</h3>
+            <div class="shortcut-item">
+                <span>Save Annotation & Next</span>
+                <span class="keycap">Enter</span>
+            </div>
+            <div class="shortcut-item">
+                <span>Skip Image</span>
+                <span class="keycap">Space</span>
+            </div>
+            <div class="shortcut-item">
+                <span>Male / Female</span>
+                <span class="keycap">M / F</span>
+            </div>
+            <div class="shortcut-item">
+                <span>Age (Infant, Child, Teen, Adult, Mature)</span>
+                <span class="keycap">1, 2, 3, 4, 5</span>
+            </div>
+            <div class="shortcut-item">
+                <span>Staff / Customer Toggle</span>
+                <span class="keycap">S / C</span>
+            </div>
+            <div class="shortcut-item">
+                <span>Undo Last Action</span>
+                <span class="keycap">Z</span>
+            </div>
+            <div class="shortcut-item">
+                <span>Zoom Lightbox</span>
+                <span class="keycap">Click Image</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Deck -->
+    <div class="toast-deck" id="toastDeck"></div>
+
+    <script>
+        // State variables
+        let images = [];
+        let currentIndex = 0;
+        let currentImage = null;
+        let curatedIds = new Set();
+        let curatedCount = 0;
+        let totalImages = 0;
+        let page = 1;
+        let hasMore = true;
+
+        let selectedGender = null;
+        let selectedAge = null;
+        let selectedStaff = false;
+
+        let lastCurated = null;
+        let undoTimer = null;
+        let undoCountdown = 10;
+
+        // Image URL Resolution with Localhost & IP Interchange
+        function getImageUrl(img) {
+            if (!img) return '';
+            
+            // If local path is provided (e.g. /data/exports/... or /crops/...)
+            if (img.image_url) {
+                const clean = img.image_url.startsWith('/') ? img.image_url.substring(1) : img.image_url;
+                return `/api/image/${clean}`;
+            }
+
+            // If MinIO URL is provided, interchange any remote production IP with current hostname
+            if (img.minio_url) {
+                const host = window.location.hostname || 'localhost';
+                // Replace any IPv4 address (e.g. 35.x.x.x or any remote IP) with current hostname
+                let resolved = img.minio_url.replace(/http:\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:9000/g, `http://${host}:9000`);
+                return resolved;
+            }
+
+            return '';
+        }
+
+        async function loadImages() {
+            try {
+                const response = await fetch(`/api/images?page=${page}&per_page=50`);
+                const data = await response.json();
+                
+                if (data.images && data.images.length > 0) {
+                    images = [...images, ...data.images];
+                    totalImages = data.total;
+                    document.getElementById('total-count').textContent = totalImages;
+                    document.getElementById('queue-badge').textContent = `${images.length} in queue`;
+                    renderQueue();
+
+                    if (!currentImage && images.length > 0) {
+                        selectImage(0);
+                    }
+                } else if (images.length === 0) {
+                    document.getElementById('queueList').innerHTML = '<div style="grid-column: span 2; text-align: center; color: var(--text-tertiary); padding: 30px 10px;">No pending images in this queue.</div>';
+                }
+            } catch (err) {
+                console.error("Failed to load images:", err);
+                showToast("Failed to fetch image batch", "error");
+            }
+        }
+
+        let currentViewMode = 'list';
+        try {
+            const savedMode = localStorage.getItem('curation_view_mode');
+            if (savedMode === 'grid' || savedMode === 'list') {
+                currentViewMode = savedMode;
+            }
+        } catch(e) {}
+        let currentQueueFilter = 'all';
+
+        function setQueueView(mode) {
+            currentViewMode = mode;
+            try { localStorage.setItem('curation_view_mode', mode); } catch(e) {}
+            const btnList = document.getElementById('btnViewList');
+            const btnGrid = document.getElementById('btnViewGrid');
+            if (btnList) btnList.classList.toggle('active', mode === 'list');
+            if (btnGrid) btnGrid.classList.toggle('active', mode === 'grid');
+            const queueList = document.getElementById('queueList');
+            if (queueList) {
+                if (mode === 'list') {
+                    queueList.classList.add('list-view');
+                } else {
+                    queueList.classList.remove('list-view');
+                }
+            }
+            renderQueue();
+        }
+
+        function filterQueue(filter) {
+            currentQueueFilter = filter;
+            renderQueue();
+        }
+
+        function renderQueue() {
+            const queueList = document.getElementById('queueList');
+            if (!queueList) return;
+            queueList.innerHTML = '';
+            
+            // Sync queueList class
+            if (currentViewMode === 'list') {
+                queueList.classList.add('list-view');
+            } else {
+                queueList.classList.remove('list-view');
+            }
+            
+            let visibleCount = 0;
+            images.forEach((img, idx) => {
+                const isCurated = curatedIds.has(img.id);
+                if (currentQueueFilter === 'pending' && isCurated) return;
+                if (currentQueueFilter === 'curated' && !isCurated) return;
+                
+                visibleCount++;
+                const card = document.createElement('div');
+                card.className = `thumb-card ${idx === currentIndex ? 'active' : ''} ${isCurated ? 'curated' : ''}`;
+                card.dataset.index = idx;
+                
+                const numStr = `#${idx + 1}`;
+                const gender = img.gender_category || 'unknown';
+                const age = img.age_category || 'unknown';
+                const isStaff = !!img.is_staff;
+                card.title = `Crop ${numStr} (${gender}, ${age}, ${isStaff ? 'Staff' : 'Customer'})`;
+
+                const imgEl = document.createElement('img');
+                imgEl.loading = 'lazy';
+                imgEl.src = getImageUrl(img);
+                imgEl.alt = img.uuid || `Crop ${numStr}`;
+                
+                imgEl.onerror = () => {
+                    if (img.image_url && !imgEl.dataset.triedLocal) {
+                        imgEl.dataset.triedLocal = 'true';
+                        imgEl.src = `/api/image/${img.image_url.replace(/^\//, '')}`;
+                    } else {
+                        imgEl.style.opacity = '0.35';
+                    }
+                };
+
+                if (currentViewMode === 'grid') {
+                    // Grid Mode: Top sequential badge + Bottom clean overlay with role & tags
+                    const indexBadge = document.createElement('div');
+                    indexBadge.className = 'thumb-index';
+                    indexBadge.textContent = numStr;
+
+                    const metaOverlay = document.createElement('div');
+                    metaOverlay.className = 'thumb-meta';
+                    const gText = gender.charAt(0).toUpperCase();
+                    const sIcon = isStaff ? '👔' : '🛒';
+                    metaOverlay.innerHTML = `
+                        <div class="grid-tags-group">
+                            <span class="vlm-tag">${gText} · ${age}</span>
+                        </div>
+                        <span class="role-indicator" title="${isStaff ? 'Staff' : 'Customer'}">${sIcon}</span>
+                    `;
+                    card.appendChild(imgEl);
+                    card.appendChild(indexBadge);
+                    card.appendChild(metaOverlay);
+                } else {
+                    // List View Mode (Default): Number Pill + Thumbnail + Metadata Details + Status Badge
+                    const seqPill = document.createElement('div');
+                    seqPill.className = 'list-seq-pill';
+                    seqPill.textContent = numStr;
+
+                    const details = document.createElement('div');
+                    details.className = 'list-card-details';
+                    
+                    let filename = '';
+                    if (img.image_url) {
+                        filename = img.image_url.split('/').pop().split('\\').pop();
+                    } else if (img.uuid) {
+                        filename = img.uuid.substring(0, 10);
+                    } else {
+                        filename = `Crop ${idx + 1}`;
+                    }
+
+                    const gClass = gender.toLowerCase() === 'male' ? 'tag-male' : (gender.toLowerCase() === 'female' ? 'tag-female' : '');
+                    
+                    details.innerHTML = `
+                        <div class="list-card-title">${filename}</div>
+                        <div class="list-card-tags">
+                            <span class="tag-pill ${gClass}">${gender}</span>
+                            <span class="tag-pill tag-age">${age}</span>
+                            <span class="tag-pill">${isStaff ? '👔 Staff' : '🛒 Customer'}</span>
+                        </div>
+                    `;
+
+                    const statusBadge = document.createElement('div');
+                    statusBadge.className = `list-status-badge ${isCurated ? 'curated' : 'pending'}`;
+                    statusBadge.innerHTML = isCurated ? '✓ Curated' : 'Pending';
+
+                    card.appendChild(seqPill);
+                    card.appendChild(imgEl);
+                    card.appendChild(details);
+                    card.appendChild(statusBadge);
+                }
+
+                card.addEventListener('click', () => selectImage(idx));
+                queueList.appendChild(card);
+            });
+
+            const badge = document.getElementById('queue-badge');
+            if (badge) badge.textContent = `${visibleCount} visible`;
+            if (visibleCount === 0) {
+                queueList.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #64748b; padding: 36px 12px; font-size: 0.82rem;">No images matching filter.</div>';
+            }
+        }
+
+        function selectImage(index) {
+            if (index < 0 || index >= images.length) return;
+            currentIndex = index;
+            currentImage = images[index];
+
+            // Highlight thumbnail
+            document.querySelectorAll('.thumb-card').forEach(el => el.classList.remove('active'));
+            const activeCard = document.querySelector(`.thumb-card[data-index="${index}"]`);
+            if (activeCard) {
+                activeCard.classList.add('active');
+                activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            // Update Viewport
+            const heroImg = document.getElementById('heroImage');
+            const url = getImageUrl(currentImage);
+            heroImg.src = url;
+            heroImg.onerror = () => {
+                if (currentImage.image_url && !heroImg.dataset.triedLocal) {
+                    heroImg.dataset.triedLocal = 'true';
+                    heroImg.src = `/api/image/${currentImage.image_url.replace(/^\//, '')}`;
+                }
+            };
+
+            // Metadata bar
+            document.getElementById('meta-store').textContent = `Store #${currentImage.store_id || '18'}`;
+            document.getElementById('meta-uuid').textContent = `UUID: ${(currentImage.uuid || '').substring(0, 16)}...`;
+            document.getElementById('image-pos-indicator').textContent = `Image ${index + 1} of ${images.length}`;
+
+            // Update VLM comparison badge
+            const gEl = document.getElementById('vlm-gender');
+            if (gEl) gEl.innerHTML = `<span class="tag-label">Gender:</span> <span class="tag-val">${currentImage.gender_category || 'unknown'}</span>`;
+            const aEl = document.getElementById('vlm-age');
+            if (aEl) aEl.innerHTML = `<span class="tag-label">Age:</span> <span class="tag-val">${currentImage.age_category || 'unknown'}</span>`;
+            const sEl = document.getElementById('vlm-staff');
+            if (sEl) sEl.innerHTML = `<span class="tag-label">Type:</span> <span class="tag-val">${currentImage.is_staff ? 'Staff' : 'Customer'}</span>`;
+
+            // Pre-populate with VLM default predictions
+            selectOption('gender', currentImage.gender_category || 'male');
+            selectOption('age', currentImage.age_category || 'adult');
+            selectOption('staff', currentImage.is_staff ? 'true' : 'false');
+        }
+
+        function applyVlmPriors() {
+            if (!currentImage) return;
+            selectOption('gender', currentImage.gender_category || 'male');
+            selectOption('age', currentImage.age_category || 'adult');
+            selectOption('staff', currentImage.is_staff ? 'true' : 'false');
+            showToast("⚡ Applied AI inference prior", "success");
+        }
+
+        function toggleQualityChip(el) {
+            el.classList.toggle('active');
+        }
+
+        function selectOption(field, value) {
+            document.querySelectorAll(`.selector-pill[data-field="${field}"]`).forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            const pill = document.querySelector(`.selector-pill[data-field="${field}"][data-value="${value}"]`);
+            if (pill) pill.classList.add('selected');
+
+            if (field === 'gender') {
+                selectedGender = value;
+                const halo = document.getElementById('imageHalo');
+                if (value === 'male') {
+                    halo.style.background = 'radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%)';
+                } else {
+                    halo.style.background = 'radial-gradient(circle, rgba(244, 114, 182, 0.25) 0%, transparent 70%)';
+                }
+            }
+            if (field === 'age') selectedAge = value;
+            if (field === 'staff') selectedStaff = (value === 'true');
+        }
+
+        async function saveCuration() {
+            if (!currentImage) return;
+
+            const payload = {
+                inference_id: currentImage.id,
+                store_id: currentImage.store_id || 18,
+                uuid: currentImage.uuid,
+                image_url: currentImage.image_url,
+                minio_url: currentImage.minio_url || '',
+                gender_category: selectedGender,
+                age_category: selectedAge,
+                is_staff: selectedStaff
+            };
+
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/curate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    lastCurated = { ...payload, curation_id: result.id, image: currentImage, index: currentIndex };
+                    curatedIds.add(currentImage.id);
+                    curatedCount++;
+                    document.getElementById('curated-count').textContent = curatedCount;
+
+                    const thumb = document.querySelector(`.thumb-card[data-index="${currentIndex}"]`);
+                    if (thumb) thumb.classList.add('curated');
+
+                    showToast('Annotation verified & saved', 'success');
+                    showUndo();
+                    goToNext();
+                } else {
+                    showToast(result.error || "Save error", "error");
+                }
+            } catch (err) {
+                showToast("Network save error", "error");
+            } finally {
+                saveBtn.disabled = false;
+            }
+        }
+
+        function goToNext() {
+            for (let i = currentIndex + 1; i < images.length; i++) {
+                if (!curatedIds.has(images[i].id)) {
+                    selectImage(i);
+                    return;
+                }
+            }
+            // Check remaining from beginning
+            for (let i = 0; i < currentIndex; i++) {
+                if (!curatedIds.has(images[i].id)) {
+                    selectImage(i);
+                    return;
+                }
+            }
+            showToast("🎉 Batch Complete! All items curated.", "success");
+        }
+
+        function goToPrev() {
+            if (currentIndex > 0) {
+                selectImage(currentIndex - 1);
+            }
+        }
+
+        function skipImage() {
+            goToNext();
+        }
+
+        function showUndo() {
+            const undoBtn = document.getElementById('undoBtn');
+            undoBtn.classList.add('visible');
+            undoCountdown = 10;
+            document.getElementById('undo-timer').textContent = undoCountdown;
+
+            if (undoTimer) clearInterval(undoTimer);
+            undoTimer = setInterval(() => {
+                undoCountdown--;
+                document.getElementById('undo-timer').textContent = undoCountdown;
+                if (undoCountdown <= 0) {
+                    hideUndo();
+                }
+            }, 1000);
+        }
+
+        function hideUndo() {
+            document.getElementById('undoBtn').classList.remove('visible');
+            if (undoTimer) {
+                clearInterval(undoTimer);
+                undoTimer = null;
+            }
+            lastCurated = null;
+        }
+
+        async function undoLastCuration() {
+            if (!lastCurated) return;
+            try {
+                const response = await fetch(`/api/curate/${lastCurated.curation_id}`, { method: 'DELETE' });
+                const res = await response.json();
+                if (res.success) {
+                    curatedIds.delete(lastCurated.image.id);
+                    curatedCount = Math.max(0, curatedCount - 1);
+                    document.getElementById('curated-count').textContent = curatedCount;
+                    const thumb = document.querySelector(`.thumb-card[data-index="${lastCurated.index}"]`);
+                    if (thumb) thumb.classList.remove('curated');
+                    selectImage(lastCurated.index);
+                    showToast("Restored image for re-curation", "success");
+                }
+            } catch (err) {
+                showToast("Undo request failed", "error");
+            }
+            hideUndo();
+        }
+
+        // Lightbox
+        function openLightbox() {
+            if (!currentImage) return;
+            const modal = document.getElementById('lightboxModal');
+            const img = document.getElementById('lightboxImg');
+            img.src = getImageUrl(currentImage);
+            modal.classList.add('active');
+        }
+
+        function closeLightbox(e) {
+            if (e && e.target.tagName === 'IMG') return;
+            document.getElementById('lightboxModal').classList.remove('active');
+        }
+
+        // Shortcuts Modal
+        function showShortcuts() {
+            document.getElementById('shortcutsModal').classList.add('active');
+        }
+
+        function hideShortcuts(e) {
+            if (e && e.target !== e.currentTarget) return;
+            document.getElementById('shortcutsModal').classList.remove('active');
+        }
+
+        // Toast Helper
+        function showToast(msg, type = 'success') {
+            const deck = document.getElementById('toastDeck');
+            const toast = document.createElement('div');
+            toast.className = `toast-pill ${type}`;
+            toast.innerHTML = `<span>${type === 'success' ? '✓' : '⚠️'}</span><span>${msg}</span>`;
+            deck.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                setTimeout(() => toast.remove(), 250);
+            }, 2500);
+        }
+
+        // Global Keyboard Handler
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+            const key = e.key.toLowerCase();
+            if (key === 'enter') {
+                e.preventDefault();
+                saveCuration();
+            } else if (key === ' ' || key === 'spacebar') {
+                e.preventDefault();
+                skipImage();
+            } else if (key === 'm') {
+                selectOption('gender', 'male');
+            } else if (key === 'f') {
+                selectOption('gender', 'female');
+            } else if (key === '1') {
+                selectOption('age', 'infant');
+            } else if (key === '2') {
+                selectOption('age', 'child');
+            } else if (key === '3') {
+                selectOption('age', 'teen');
+            } else if (key === '4') {
+                selectOption('age', 'adult');
+            } else if (key === '5') {
+                selectOption('age', 'mature');
+            } else if (key === 's') {
+                selectOption('staff', 'true');
+            } else if (key === 'c') {
+                selectOption('staff', 'false');
+            } else if (key === 'z') {
+                undoLastCuration();
+            } else if (key === 'arrowleft') {
+                goToPrev();
+            } else if (key === 'arrowright') {
+                skipImage();
+            } else if (key === 'escape') {
+                closeLightbox();
+                hideShortcuts();
+            } else if (key === '?' || key === '/') {
+                const modal = document.getElementById('shortcutsModal');
+                if (modal.classList.contains('active')) {
+                    hideShortcuts();
+                } else {
+                    showShortcuts();
+                }
+            } else if (key === 'g') {
+                toggleCrosshair();
+            } else if (key === 'i') {
+                toggleFilter('invert');
+            } else if (key === 'b') {
+                toggleFilter('brightness');
+            }
+        });
+
+        // Image Filters
+        let activeFilters = { contrast: false, brightness: false, invert: false };
+        function toggleFilter(type) {
+            activeFilters[type] = !activeFilters[type];
+            document.getElementById(`btn${type.charAt(0).toUpperCase() + type.slice(1)}`).classList.toggle('active', activeFilters[type]);
+            applyImageFilters();
+        }
+        function toggleCrosshair() {
+            const overlay = document.getElementById('crosshairOverlay');
+            overlay.classList.toggle('active');
+            document.getElementById('btnCrosshair').classList.toggle('active', overlay.classList.contains('active'));
+        }
+        function resetFilters() {
+            activeFilters = { contrast: false, brightness: false, invert: false };
+            document.querySelectorAll('.inspect-tool-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('crosshairOverlay').classList.remove('active');
+            applyImageFilters();
+        }
+        function applyImageFilters() {
+            const img = document.getElementById('heroImage');
+            let f = [];
+            if (activeFilters.contrast) f.push('contrast(160%)');
+            if (activeFilters.brightness) f.push('brightness(140%)');
+            if (activeFilters.invert) f.push('invert(100%)');
+            img.style.filter = f.length > 0 ? f.join(' ') : 'none';
+        }
+
+        // Initialize on Load
+        setQueueView(currentViewMode);
+        loadImages();
+    </script>
+
+</body>
+</html>

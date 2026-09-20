@@ -1,0 +1,102 @@
+/* ===========================================================================
+   OLY VISION — Global Layout & Typography Overrides
+   Adjusts navbar sizing, font sizes, spacing for a fresh distinct look
+   =========================================================================== */
+
+:root {
+    /* Navbar dimensions */
+    --navbar-height: 80px;
+    --navbar-padding-x: 48px;
+    --navbar-gap: 20px;
+    --navbar-font-size: 1.125rem; /* 18px */
+    --brand-font-size: 2.5rem;
+    --brand-gap: 16px;
+    
+    /* Global font sizes */
+    --font-base: 1.125rem;      /* 18px */
+    --font-sm: 0.9375rem;      /* 15px */
+    --font-lg: 1.3125rem;      /* 21px */
+    --line-height-base: 1.6;
+}
+
+/* ---- Navbar ---- */
+.navbar {
+    height: var(--navbar-height);
+    padding: 0 var(--navbar-padding-x);
+    align-items: center;
+    gap: var(--navbar-gap);
+}
+
+.navbar a {
+    font-size: var(--navbar-font-size);
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.navbar a:hover {
+    background: rgba(255,255,255,0.08);
+    color: var(--text-primary);
+}
+
+/* ---- Brand ---- */
+.brand-text {
+    font-size: var(--brand-font-size) !important;
+    gap: var(--brand-gap) !important;
+}
+
+/* ---- Global typography ---- */
+body {
+    font-size: var(--font-base);
+    line-height: var(--line-height-base);
+}
+
+h1, .heading-lg {
+    font-size: var(--font-lg);
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+}
+
+h2, .heading-md {
+    font-size: var(--font-base);
+    margin-bottom: 0.5rem;
+}
+
+p, .text-sm {
+    font-size: var(--font-sm);
+}
+
+/* ---- Buttons ---- */
+button, .btn {
+    font-size: var(--navbar-font-size);
+    padding: 10px 20px;
+    border-radius: 12px;
+    transition: transform 0.1s ease;
+}
+
+button:hover, .btn:hover {
+    transform: translateY(-2px);
+}
+
+/* ---- Card spacing ---- */
+.stat-glass-card, .queue-panel, .viewport-panel, .curation-deck, .action-card, .task-card, .table-card {
+    padding: 24px;
+    margin: 16px 0;
+    border-radius: 20px;
+}
+
+/* ---- Responsive tweaks ---- */
+@media (max-width: 768px) {
+    :root {
+        --navbar-height: 64px;
+        --font-base: 1rem;
+        --navbar-font-size: 1rem;
+    }
+    .navbar {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .brand-text {
+        font-size: 2rem !important;
+    }
+}

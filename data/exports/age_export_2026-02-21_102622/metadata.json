@@ -1,0 +1,57 @@
+{
+  "export_id": "age_export_2026-02-21_102622",
+  "task": "age",
+  "created_at": "2026-02-21T10:26:22.316840",
+  "source_table": "vlm_curated",
+  "excluded_labels": [
+    "unknown"
+  ],
+  "classes": [
+    "infant",
+    "child",
+    "teen",
+    "adult",
+    "mature"
+  ],
+  "split_ratios": {
+    "train": 0.7,
+    "valid": 0.15,
+    "test": 0.15
+  },
+  "random_seed": 42,
+  "total_images": 44,
+  "failed_downloads": 0,
+  "class_distribution": {
+    "train": {
+      "adult": 21,
+      "mature": 4,
+      "child": 2
+    },
+    "valid": {
+      "adult": 4,
+      "mature": 1
+    },
+    "test": {
+      "teen": 1,
+      "adult": 6,
+      "mature": 2,
+      "child": 2,
+      "infant": 1
+    }
+  },
+  "paths": {
+    "train": "/home/nihit/highlander/data/exports/age_export_2026-02-21_102622/train",
+    "valid": "/home/nihit/highlander/data/exports/age_export_2026-02-21_102622/valid",
+    "test": "/home/nihit/highlander/data/exports/age_export_2026-02-21_102622/test"
+  },
+  "total_per_class": {
+    "adult": 31,
+    "mature": 7,
+    "child": 4,
+    "teen": 1,
+    "infant": 1
+  },
+  "min_class_count": 1,
+  "max_class_count": 31,
+  "imbalance_ratio": 31.0
+}

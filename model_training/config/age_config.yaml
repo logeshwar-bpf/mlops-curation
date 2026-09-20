@@ -1,0 +1,73 @@
+# OLY VISION - Age Classification Training Config
+# ================================================
+
+experiment:
+  name: "age_classifier"
+  task: "age"
+  description: "Train age classification model (infant/child/teen/adult/mature, excluding unknown)"
+
+data:
+  train_dir: "/home/nihit/highlander/data/prepared/age/train"
+  valid_dir: "/home/nihit/highlander/data/prepared/age/valid"
+  test_dir: "/home/nihit/highlander/data/prepared/age/test"
+  image_size: [224, 224]
+  batch_size: 32
+  num_workers: 4
+  pin_memory: true
+  
+  augmentation:
+    enabled: true
+    horizontal_flip: 0.5
+    brightness_limit: 0.25
+    contrast_limit: 0.25
+    rotate_limit: 15
+
+model:
+  # Slightly larger model for 5-class classification
+  architecture: "efficientnet_b1"
+  pretrained: true
+  dropout: 0.4
+  classifier:
+    hidden_dims: [512, 256]
+    use_batchnorm: true
+
+training:
+  epochs: 50
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  optimizer: "adam"
+  
+  scheduler:
+    type: "cosine_annealing"
+  
+  early_stopping:
+    enabled: true
+    patience: 10
+    min_delta: 0.001
+    monitor: "val_loss"
+  
+  # Important for age classification (often imbalanced)
+  class_weights: "balanced"
+  gradient_clip: 1.0
+
+hardware:
+  device: "auto"
+  mixed_precision: false
+
+output:
+  save_dir: "/home/nihit/highlander/artifacts/age"
+  save_every_epoch: false
+  save_best_only: true
+  
+  artifacts:
+    confusion_matrix: true
+    classification_report: true
+    learning_curves: true
+    sample_predictions: true
+    misclassified_images: true
+    onnx_export: true
+
+logging:
+  level: "INFO"
+  log_to_file: true
+  tensorboard: false

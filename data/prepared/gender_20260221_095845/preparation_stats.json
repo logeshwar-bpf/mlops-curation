@@ -1,0 +1,38 @@
+{
+  "prepared_at": "2026-02-21T09:58:55.214388",
+  "input_dir": "/home/nihit/highlander/data/exports/gender_export_2026-02-21_095846",
+  "output_dir": "/home/nihit/highlander/data/prepared/gender_20260221_095845",
+  "augmented": true,
+  "balanced": true,
+  "splits": {
+    "train": {
+      "path": "/home/nihit/highlander/data/prepared/gender_20260221_095845/train",
+      "total": 30,
+      "per_class": {
+        "male": 15,
+        "female": 15
+      }
+    },
+    "valid": {
+      "path": "/home/nihit/highlander/data/prepared/gender_20260221_095845/valid",
+      "total": 5,
+      "per_class": {
+        "male": 2,
+        "female": 3
+      }
+    },
+    "test": {
+      "path": "/home/nihit/highlander/data/prepared/gender_20260221_095845/test",
+      "total": 8,
+      "per_class": {
+        "male": 4,
+        "female": 4
+      }
+    }
+  },
+  "classes": [
+    "female",
+    "male"
+  ],
+  "num_classes": 2
+}

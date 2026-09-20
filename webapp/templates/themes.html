@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLOps Curation — Design System Showcase</title>
+    <meta name="description" content="MLOps Curation Eye-Friendly Liquid Glass Design System & Component Showcase.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/themes.css?v=7.0">
+    <script src="/static/instant-nav.js"></script>
+    <style>
+        html {
+            background-color: #080c14 !important;
+            color-scheme: dark;
+            scrollbar-gutter: stable both-edges;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            letter-spacing: normal !important;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #080c14 !important;
+            min-height: 100vh;
+            color: #f8fafc;
+            overflow-x: hidden;
+            position: relative;
+            letter-spacing: normal !important;
+            line-height: 1.5;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 40px 32px 96px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Header */
+        .hero-section {
+            margin-bottom: 48px;
+            text-align: center;
+        }
+
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #ede9fe;
+            border: 1px solid rgba(196, 181, 253, 0.6);
+            padding: 6px 18px;
+            border-radius: 9999px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #4338ca;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+            margin-bottom: 18px;
+        }
+
+        .badge-pill::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #6366f1;
+            box-shadow: 0 0 8px #6366f1;
+        }
+
+        .hero-title {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.22;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+            margin-bottom: 14px;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, #4f46e5 0%, #2563eb 60%, #0284c7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            color: #475569;
+            max-width: 680px;
+            margin: 0 auto 28px;
+            line-height: 1.6;
+        }
+
+        .doodle-hero {
+            font-family: 'Caveat', cursive;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #6366f1;
+            transform: rotate(-3deg);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Quick Launch Dock */
+        .quick-launch-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 52px;
+        }
+
+        .quick-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            border-radius: 20px;
+            padding: 22px;
+            text-decoration: none;
+            color: #0f172a;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-3px);
+            border-color: #cbd5e1;
+            box-shadow: 0 12px 28px -6px rgba(99, 102, 241, 0.12);
+        }
+
+        .quick-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .quick-desc {
+            font-size: 0.84rem;
+            color: #64748b;
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+
+        .quick-arrow {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #6366f1;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: gap 0.2s;
+        }
+
+        .quick-card:hover .quick-arrow {
+            gap: 8px;
+        }
+
+        /* Showcase Grid */
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 22px;
+            margin-bottom: 56px;
+        }
+
+        .showcase-col-6 { grid-column: span 6; }
+        .showcase-col-4 { grid-column: span 4; }
+        .showcase-col-8 { grid-column: span 8; }
+        .showcase-col-12 { grid-column: span 12; }
+
+        .spec-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            border-radius: 22px;
+            padding: 28px;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.03);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .spec-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .spec-desc {
+            font-size: 0.86rem;
+            color: #64748b;
+            line-height: 1.55;
+            margin-bottom: 22px;
+        }
+
+        /* Tokens Swatch Bar */
+        .swatches {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .swatch-item {
+            flex: 1;
+            min-width: 95px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 12px 10px;
+            text-align: center;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .swatch-color {
+            width: 100%;
+            height: 38px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .swatch-name {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .swatch-val {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.68rem;
+            color: #64748b;
+        }
+
+        /* Interactive component row */
+        .component-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        @media (max-width: 992px) {
+            .quick-launch-grid { grid-template-columns: repeat(2, 1fr); }
+            .showcase-col-6, .showcase-col-4, .showcase-col-8 { grid-column: span 12; }
+            .hero-title { font-size: 2.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Aurora Background -->
+    <div class="ambient-aurora" aria-hidden="true">
+        <div class="aurora-orb orb-1"></div>
+        <div class="aurora-orb orb-2"></div>
+        <div class="aurora-orb orb-3"></div>
+    </div>
+
+    <!-- Unified Navbar -->
+    <nav class="navbar" role="navigation" aria-label="Main Navigation">
+        <a href="/main" class="navbar-brand">
+            <div class="brand-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+            </div>
+            <div>
+                <div class="brand-title">OLY <span class="vision">VISION</span></div>
+                <div class="brand-sub">VLM CURATION SUITE</div>
+            </div>
+        </a>
+
+        <div class="navbar-nav">
+            <a href="/main" class="nav-link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="/curation" class="nav-link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/></svg>
+                <span>Curation</span>
+            </a>
+            {% if role == 'admin' %}
+            <a href="/admin" class="nav-link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                <span>Admin</span>
+            </a>
+            <a href="/training" class="nav-link nav-mlops">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <span>MLOps</span>
+            </a>
+            {% endif %}
+            <a href="/themes" class="nav-link active">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+                <span>Design System</span>
+            </a>
+        </div>
+
+        <div class="user-chip">
+            <div class="user-avatar">{{ user[0].upper() if user else 'U' }}</div>
+            <div class="user-info">
+                <div class="user-name">{{ user or 'User' }}</div>
+                <div class="user-role">{{ (role or 'Curator')|upper }}</div>
+            </div>
+            <a href="/logout" class="btn-signout">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Sign out
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="container">
+
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="badge-pill">Design Specification & Architecture</div>
+            <h1 class="hero-title">Mission Control <span>Visual Identity</span></h1>
+            <p class="hero-desc">
+                The eye-friendly pastel design system engineered for prolonged VLM curation and model training operations. Features zero eye strain, squircle icon cards, and fluid ambient gradients.
+            </p>
+            <div class="doodle-hero">
+                Better Models · Brighter Possibilities ✨
+            </div>
+        </div>
+
+        <!-- Quick Launch Grid to All 4 Core Views -->
+        <div class="quick-launch-grid">
+            <a href="/main" class="quick-card">
+                <div>
+                    <div class="squircle-icon sq-blue" style="margin-bottom: 12px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+                    </div>
+                    <div class="quick-name">Mission Control</div>
+                    <div class="quick-desc">Real-time KPI bento grid, progress rings, and active batch workload telemetry.</div>
+                </div>
+                <div class="quick-arrow">Open Dashboard →</div>
+            </a>
+
+            <a href="/curation" class="quick-card">
+                <div>
+                    <div class="squircle-icon sq-green" style="margin-bottom: 12px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/></svg>
+                    </div>
+                    <div class="quick-name">Curation Station</div>
+                    <div class="quick-desc">Split-view workspace with high-contrast Canvas Sanctuary for label precision.</div>
+                </div>
+                <div class="quick-arrow">Launch Curation →</div>
+            </a>
+
+            <a href="/admin" class="quick-card">
+                <div>
+                    <div class="squircle-icon sq-purple" style="margin-bottom: 12px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </div>
+                    <div class="quick-name">Admin Console</div>
+                    <div class="quick-desc">Batch allocations, curator permissions, quality review, and pipeline health.</div>
+                </div>
+                <div class="quick-arrow">Manage Operations →</div>
+            </a>
+
+            <a href="/training" class="quick-card">
+                <div>
+                    <div class="squircle-icon sq-amber" style="margin-bottom: 12px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    </div>
+                    <div class="quick-name">MLOps Studio</div>
+                    <div class="quick-desc">Train ConvNeXt/ResNet backbones, inspect confusion matrices, deploy ONNX models.</div>
+                </div>
+                <div class="quick-arrow">Launch Studio →</div>
+            </a>
+        </div>
+
+        <!-- Component & Token Showcase Grid -->
+        <div class="showcase-grid">
+
+            <!-- Card 1: Core Color Tokens -->
+            <div class="spec-card showcase-col-12">
+                <div class="spec-title">🎨 Eye-Friendly Pastel Palette</div>
+                <div class="spec-desc">Harmonious pastel tints over soft canvas (#F6F8FC) paired with Slate-900 typography to guarantee comfortable readability without glare.</div>
+                <div class="swatches">
+                    <div class="swatch-item">
+                        <div class="swatch-color" style="background: #f6f8fc;"></div>
+                        <div class="swatch-name">Canvas</div>
+                        <div class="swatch-val">#F6F8FC</div>
+                    </div>
+                    <div class="swatch-item">
+                        <div class="swatch-color" style="background: #ffffff;"></div>
+                        <div class="swatch-name">Card Surface</div>
+                        <div class="swatch-val">#FFFFFF</div>
+                    </div>
+                    <div class="swatch-item">
+                        <div class="swatch-color" style="background: #6366f1;"></div>
+                        <div class="swatch-name">Indigo Primary</div>
+                        <div class="swatch-val">#6366F1</div>
+                    </div>
+                    <div class="swatch-item">
+                        <div class="swatch-color" style="background: #2563eb;"></div>
+                        <div class="swatch-name">Blue Accent</div>
+                        <div class="swatch-val">#2563EB</div>
+                    </div>
+                    <div class="swatch-item">
+                        <div class="swatch-color" style="background: #10b981;"></div>
+                        <div class="swatch-name">Emerald Mint</div>
+                        <div class="swatch-val">#10B981</div>
+                    </div>
+                    <div class="swatch-item">
+                        <div class="swatch-color" style="background: #f59e0b;"></div>
+                        <div class="swatch-name">Warm Amber</div>
+                        <div class="swatch-val">#F59E0B</div>
+                    </div>
+                    <div class="swatch-item">
+                        <div class="swatch-color" style="background: #ede9fe;"></div>
+                        <div class="swatch-name">Lavender Pill</div>
+                        <div class="swatch-val">#EDE9FE</div>
+                    </div>
+                    <div class="swatch-item">
+                        <div class="swatch-color" style="background: #0f172a;"></div>
+                        <div class="swatch-name">Text Primary</div>
+                        <div class="swatch-val">#0F172A</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Interactive Buttons & Controls -->
+            <div class="spec-card showcase-col-6">
+                <div class="spec-title">🔘 Action Pill Buttons & Badges</div>
+                <div class="spec-desc">Tactile pill buttons matching the reference image's vibrant indigo and pastel outlines.</div>
+
+                <div class="component-row">
+                    <button class="action-pill-btn btn-indigo">
+                        <span>Open Workspace</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                    </button>
+                    <button class="action-pill-btn btn-purple">
+                        <span>Configure</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                    </button>
+                    <button class="action-pill-btn btn-cyan">
+                        <span>Launch</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                    </button>
+                </div>
+
+                <div class="component-row" style="margin-top: 20px;">
+                    <span class="trend-badge up">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+                        +12.4% vs last batch
+                    </span>
+                    <span class="trend-badge neutral">
+                        Target 85%
+                    </span>
+                    <span class="trend-badge warn">
+                        Needs Attention
+                    </span>
+                </div>
+            </div>
+
+            <!-- Card 3: Bento Card with Decorative Wave -->
+            <div class="spec-card showcase-col-6">
+                <div class="spec-title">🌊 Bento Card with Pastel Decorative Wave</div>
+                <div class="spec-desc">Subtle vector liquid waves in the corner of metric cards provide personality without visual noise.</div>
+
+                <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 22px; position: relative; overflow: hidden; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 1;">
+                        <div class="squircle-icon sq-blue">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                        </div>
+                        <span class="trend-badge up">+8.5%</span>
+                    </div>
+                    <div style="font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-top: 14px; position: relative; z-index: 1;">1,248</div>
+                    <div style="font-size: 0.82rem; font-weight: 600; color: #64748b; position: relative; z-index: 1;">TOTAL DATASETS CURATED</div>
+
+                    <!-- Decorative Wave -->
+                    <svg style="position: absolute; right: 0; bottom: 0; pointer-events: none; opacity: 0.75;" width="140" height="60" viewBox="0 0 140 60" fill="none">
+                        <path d="M0 45 C 35 15, 75 55, 140 25 L 140 60 L 0 60 Z" fill="url(#demoWaveGrad)" />
+                        <defs>
+                            <linearGradient id="demoWaveGrad" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stop-color="#93c5fd" stop-opacity="0.45"/>
+                                <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.15"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

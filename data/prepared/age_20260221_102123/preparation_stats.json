@@ -1,0 +1,39 @@
+{
+  "prepared_at": "2026-02-21T10:21:26.301215",
+  "input_dir": "/home/nihit/highlander/data/exports/age_export_2026-02-21_102123",
+  "output_dir": "/home/nihit/highlander/data/prepared/age_20260221_102123",
+  "augmented": true,
+  "balanced": true,
+  "splits": {
+    "train": {
+      "path": "/home/nihit/highlander/data/prepared/age_20260221_102123/train",
+      "total": 42,
+      "per_class": {
+        "adult": 21,
+        "mature": 21
+      }
+    },
+    "valid": {
+      "path": "/home/nihit/highlander/data/prepared/age_20260221_102123/valid",
+      "total": 5,
+      "per_class": {
+        "adult": 4,
+        "mature": 1
+      }
+    },
+    "test": {
+      "path": "/home/nihit/highlander/data/prepared/age_20260221_102123/test",
+      "total": 9,
+      "per_class": {
+        "adult": 6,
+        "child": 1,
+        "mature": 2
+      }
+    }
+  },
+  "classes": [
+    "adult",
+    "mature"
+  ],
+  "num_classes": 2
+}

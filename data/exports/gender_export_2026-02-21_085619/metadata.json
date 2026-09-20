@@ -1,0 +1,47 @@
+{
+  "export_id": "gender_export_2026-02-21_085619",
+  "task": "gender",
+  "created_at": "2026-02-21T08:56:19.614123",
+  "source_table": "vlm_curated",
+  "excluded_labels": [
+    "unknown"
+  ],
+  "classes": [
+    "male",
+    "female"
+  ],
+  "split_ratios": {
+    "train": 0.7,
+    "valid": 0.15,
+    "test": 0.15
+  },
+  "random_seed": 42,
+  "total_images": 40,
+  "failed_downloads": 0,
+  "class_distribution": {
+    "train": {
+      "female": 15,
+      "male": 12
+    },
+    "valid": {
+      "male": 2,
+      "female": 3
+    },
+    "test": {
+      "female": 4,
+      "male": 4
+    }
+  },
+  "paths": {
+    "train": "/home/nihit/highlander/data/exports/gender_export_2026-02-21_085619/train",
+    "valid": "/home/nihit/highlander/data/exports/gender_export_2026-02-21_085619/valid",
+    "test": "/home/nihit/highlander/data/exports/gender_export_2026-02-21_085619/test"
+  },
+  "total_per_class": {
+    "female": 22,
+    "male": 18
+  },
+  "min_class_count": 18,
+  "max_class_count": 22,
+  "imbalance_ratio": 1.22
+}
