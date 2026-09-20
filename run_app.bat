@@ -11,6 +11,13 @@ echo Default Credentials:
 echo   Admin:   admin / admin123
 echo   Curator: curator / curator123
 echo.
+if not exist "venv" (
+    echo [INFO] Creating Python virtual environment (venv)...
+    python -m venv venv
+    echo [INFO] Installing dependencies from requirements.txt...
+    .\venv\Scripts\pip.exe install -r requirements.txt
+)
+
 echo Starting server...
 .\venv\Scripts\python.exe webapp\app.py
 pause
