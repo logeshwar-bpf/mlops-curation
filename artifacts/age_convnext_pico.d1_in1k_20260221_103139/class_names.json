@@ -1,0 +1,23 @@
+{
+  "classes": [
+    "adult",
+    "child",
+    "infant",
+    "mature",
+    "teen"
+  ],
+  "index_to_class": {
+    "0": "adult",
+    "1": "child",
+    "2": "infant",
+    "3": "mature",
+    "4": "teen"
+  },
+  "class_to_index": {
+    "adult": 0,
+    "child": 1,
+    "infant": 2,
+    "mature": 3,
+    "teen": 4
+  }
+}
